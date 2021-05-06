@@ -1,4 +1,66 @@
-<h1 class="headerTitle">Transactions</h1>
+<%= render 'navigation/navbar' %>
 
+<div class="container josh"> 
 
-<p> Hello world</p>
+  <h1>Create a Transaction</h1>
+
+  <%= form_with model: @transaction do |form| %>
+    <div class="row g-3 align-items-center">
+      <div class="col-auto transFormColumn">
+        <label for="date" class="col-form-label">Date</label>
+        <label for="description" class="col-form-label">Description</label>
+        <label for="amount" class="col-form-label">Amount</label>
+      </div>
+      <div class="col-auto">
+        <%= form.date_field :date, :class => "form-control" %>
+        <%= form.text_field :description, :class => "form-control" %>
+        <%= form.number_field :amount, :class => "form-control" %>
+      </div>
+      <div class="col-auto transFormColumn">
+        <span id="dateHelpInline" class="form-text"> Must be in the format YYYY-MM-DD </span>
+        <span id="descriptionHelpInline" class="form-text"> Enter a description </span>
+        <span id="amountHelpInline" class="form-text"> Enter an amount </span>
+      </div>
+    </div>
+    <%= form.submit :class => "btn btn-primary" %>
+  <% end %>
+ 
+
+  <h1>Transactions</h1>
+
+  <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Date</th>
+      <th scope="col">Description</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Edit/Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <% amountInDollars = transaction.amount / 100 %>
+      <tr>
+        <th scope="row"><%= transaction.id %></th>
+        <td><%= transaction.date %></td>
+        <td><%= transaction.description %></td>
+        <td><%= number_to_currency(amountInDollars) %></td>
+        <td>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <%= link_to "Edit", edit_transaction_path(transaction) %>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                <%= link_to "Delete", transaction_path(transaction), method: :delete %>
+              </li>
+            </ol>
+          </nav>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  </table>
+
+</div>
